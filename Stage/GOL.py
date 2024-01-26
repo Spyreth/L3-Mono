@@ -138,23 +138,21 @@ def main(cell_width, dim1, dim2, fps_max):
     pygame.display.set_caption("conway's game of life")
     clock = pygame.time.Clock()
 
-    Cell_width = int(cell_width)
-    dim1 = int(dim1)
-    dim2 = int(dim2)
-    screendim1 = dim1*Cell_width
-    screendim2 = dim2*Cell_width
+    screendim1 = dim1*cell_width
+    screendim2 = dim2*cell_width
 
     screen = pygame.display.set_mode((screendim1,screendim2))
 
+    #Cells + screen initialization
     cells0 = np.zeros((dim1,dim2))
-    
-    #cells2 = (np.random.rand(dim1,dim2)<0.4).astype(int)
-    cells = update_cells(cells0)
-    
+    #cells2 = (np.random.rand(dim1,dim2)<0.4).astype(int)    #random start, needs imlementationi
     screen.fill(colorB)
+    cells = update(screen, cells0, cell_width)
     pygame.display.flip()
 
-    running = False
+    running = False  #The cells are not evolving at first
+
+    #game loop
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
