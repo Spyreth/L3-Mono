@@ -125,5 +125,5 @@ def plot_func(h):
     plt.show()
 
 
-h = np.array([0,0,1,1,1,2,3,2,2,1,0,0,0])
+h = np.array([2,2,1,0,0,1,1,2,2,1,1,1,1,0,0,0])
 plot_func(h)

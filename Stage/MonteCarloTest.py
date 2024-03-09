@@ -21,19 +21,24 @@ def evol(start, end, pas):
 
     arr_pi = np.array([])
     arr_n = np.array(range(start,end,pas))
+    i = 0
 
     for elem in arr_n :
+        i += 1
         arr_pi = np.append(arr_pi, calc(elem))
-
+        if i*pas/end*100 %5 == 0:
+            print(f"{i*pas/end*100}% done")
+    
+    print(f"{100}% done")
     return arr_n, arr_pi
 
 
-time = 100
+time = 200
 fps = 30
 nb_frames = time*fps
 interval_vid = time/nb_frames
 n_start = 100
-n_end = 40000
+n_end = 100000
 step = (n_end-n_start)/nb_frames
 
 arr_n, arr_pi = evol(int(n_start), int(n_end), int(step))

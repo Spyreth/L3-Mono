@@ -164,12 +164,16 @@ def main(cell_width, dim1, dim2, fps_max):
                     running = not running
                     cells = update(screen,cells,cell_width)
                     pygame.display.flip()
+
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
-                if cells[pos[0]//cell_width, pos[1]//cell_width] == 1:
-                    cells[pos[0]//cell_width, pos[1]//cell_width] = 0
-                else :  
-                    cells[pos[0]//cell_width, pos[1]//cell_width] = 1
+                cells[pos[0]//cell_width, pos[1]//cell_width] = 1
+                update_screen(screen,cells,cell_width)
+                pygame.display.update()
+
+            if pygame.mouse.get_pressed()[2]:
+                pos = pygame.mouse.get_pos()
+                cells[pos[0]//cell_width, pos[1]//cell_width] = 0
                 update_screen(screen,cells,cell_width)
                 pygame.display.update()
 
