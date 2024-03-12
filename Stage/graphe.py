@@ -85,6 +85,8 @@ def plot_func(h):
     fig, (ax1,ax2) = plt.subplots(2,1,figsize = (12,10), dpi=100)
     ax1.grid(color='black', linewidth=0.4, alpha = 0.8)
     #ax1.axis("off")
+    ax1.set_ylabel("eV")
+    ax1.set_xlabel("position")
     ax1.set_xlim(x[0],x[-1])
     ax1.set_ylim(potmin-0.02,potmax+0.02)
 
@@ -92,6 +94,8 @@ def plot_func(h):
     ax2.set_box_aspect(aspect_ratio)
     ax2.set_xlim(x[0],x[-1])
     ax2.set_ylim(-0.3,hmax+0.3)
+    ax2.set_xlabel("position")
+    ax2.set_yticks([])
     #ax2.axis("off")
     ax2.plot(x,np.zeros(x.size), color='black')
 
@@ -125,5 +129,5 @@ def plot_func(h):
     plt.show()
 
 
-h = np.array([2,2,1,0,0,1,1,2,2,1,1,1,1,0,0,0])
+h = np.array([0,0,0,2,1,1,1,2,1,0,0,0])
 plot_func(h)

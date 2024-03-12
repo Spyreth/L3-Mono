@@ -42,6 +42,9 @@ n_end = 100000
 step = (n_end-n_start)/nb_frames
 
 arr_n, arr_pi = evol(int(n_start), int(n_end), int(step))
+plt.xscale('log')
+plt.xlabel('nb de points aléatoires')
+plt.ylabel('valeur approchée de pi')
 plt.scatter(arr_n, arr_pi)
 plt.show()
 
