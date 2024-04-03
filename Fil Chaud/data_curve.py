@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 def scientific_to_decimal(scientific_str):
     return float(scientific_str)
 
-df = pd.read_csv(r'C:\GIT REPOS\L3-Mono\Fil Chaud\deuxiememesure.csv', converters={'CH1': scientific_to_decimal})
+df = pd.read_csv(r'C:\GIT REPOS\L3-Mono\Fil Chaud\Newfile1.csv', converters={'CH1': scientific_to_decimal})
 
 t = df['X']
 U = df['CH1']

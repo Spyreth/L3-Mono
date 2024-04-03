@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 gamma = np.array([1.16, 1.32, 1.66, 1.66, 1.66, 1.66, 1.66, 1.66])
 E_S = np.array([0.16, 0.28, 0.60, 0.60, 0.60, 0.60, 0.60, 0.60])
 E_N = np.array([0.50, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40, 0.40])
-E_R = 0.05
-E_ES12 = 0.10
+E_R = 0.12
+E_ES12 = 0
 E_ES23 = 0
 E_ES34 = 0
 E_ES45 = 0
-E_ESRESTE = 3
+E_ESRESTE = 1
 E_ES = np.array([[0.0, E_ES12, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE],
                 [E_ES12, 0.0, E_ES23, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE],
                 [E_ESRESTE, E_ES23, 0.0, E_ES34, E_ESRESTE, E_ESRESTE, E_ESRESTE, E_ESRESTE],
@@ -129,5 +129,5 @@ def plot_func(h):
     plt.show()
 
 
-h = np.array([0,0,0,2,1,1,1,2,1,0,0,0])
+h = np.array([0,0,0,2,1,1,1,1,2,0,0,0])
 plot_func(h)
