@@ -13,7 +13,7 @@ def random_vit(n, L_box, D):
     Returns:
         v_0 (D-d array): vitesses nes n particules à D-dim
     """
-    v_0 = L_box/20*(np.random.rand(n,D)-0.5)
+    v_0 = L_box/2*(np.random.rand(n,D)-0.5)
     return v_0
 
 

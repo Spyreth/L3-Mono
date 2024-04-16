@@ -68,7 +68,7 @@ def dLJpot_i(r, i, sig, eps, cut_off, nb_part, D):
     r14 = 2.0*(sig**12)*(1.0/dpart_calc_cut)**14
     r814 = r14-r8
     r814v = dpart_cut*r814
-    dLJP_i = 24.0*eps*np.sum(r814v,axis=0)
+    dLJP_i = -24.0*eps*np.sum(r814v,axis=0)
     
     return dLJP_i
 
