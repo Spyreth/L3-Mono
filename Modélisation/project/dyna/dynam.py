@@ -6,8 +6,9 @@ from numba import njit
 def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
 
     force = np.empty((nb_part,D), dtype=float)
-    force_wall = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
-    #force_wall = 0
+    #force_wall = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
+    #force_wall = testPot(r_0, nb_part, D, sig, L_box, 10000)
+    force_wall = 0
     for i in range(nb_part):
         force[i] = dLJpotnumb(r_0, i, sig, eps, cutoff, nb_part, D)
 
@@ -47,7 +48,22 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
         incr += 1
     return force
 
-
+@njit
+def testPot(r, nb_part, D, sig, L, a):
+    force = np.empty((nb_part, D), dtype=float)
+    incr = 0
+    cut = sig
+    cut2 = L - sig
+    for elem in r:
+        for d in range(D):
+            if elem[d] < cut:
+                force[incr][d] = -a*elem[d] + a*sig
+            elif elem[d] > cut2:
+                force[incr][d] = a*(L-elem[d]) - a*sig
+            else:
+                force[incr][d] = 0
+        incr += 1
+    return force
 
 
 
@@ -139,10 +155,40 @@ def dLJpotnumb(r, i, sig, eps, cut_off, nb_part, D):
     r8 =  (sig**6)*(1.0/dpart_calc_cut)**8
     r14 = 2.0*(sig**12)*(1.0/dpart_calc_cut)**14
     r814 = r14-r8
-    r814v = (dpart_cut)*r814
+    r814v = dpart_cut*r814
     dLJP = 24.0*eps*np.sum(r814v,axis=0)
     
     return dLJP
+
+
+
+@njit
+def reflectBC(r_0, v_0, nb_part, L_box, D, rayon):
+    """
+    Applique les conditions limites d'une boîte solide
+
+    Args:
+        r_0 (array): Positions des particules à t0
+        r_1 (array): Positions des particules à t1
+
+    Returns:
+        r_0 (array): Positions des particules à t0 corrigée
+        r_1 (array): Positions des particules à t1 corrigée
+    """
+    
+    r0 = r_0
+    v0 = v_0
+    
+    for i in range(nb_part):  #pour chaque particule
+        for j in range(D):   #dans chaque dimension
+            #si r1 sort de la boite en 0 ou en L, on inverse les positions
+            if r0[i][j]<rayon:
+                r0[i][j] = -r0[i][j]+2*rayon
+                v0[i][j] = -v0[i][j]
+            if r0[i][j]>(L_box-rayon):
+                r0[i][j] = 2.0*L_box-r0[i][j]-2*rayon
+                v0[i][j] = -v0[i][j]
+    return r0, v0
 
 
 

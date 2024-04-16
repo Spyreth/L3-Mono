@@ -50,9 +50,9 @@ def LJpotWalls(r, sig, eps, nb_part, L):
         E_LJi = np.empty(2, dtype=float)
         for d in range(2):
             if elem[d] < cut:
-                E_LJi[d] = 4*eps*((sig/elem[d])**12-(sig/elem[d])**6)
+                E_LJi[d] = 4*eps*((sig/elem[d])**12-(sig/elem[d])**6) + eps
             elif elem[d] > cut2:
-                E_LJi[d] = 4*eps*((sig**12)*((1/(L-elem[d])**12)) - (sig**6)*(1/((L-elem[d])**6)))
+                E_LJi[d] = 4*eps*((sig**12)*((1/(L-elem[d])**12)) - (sig**6)*(1/((L-elem[d])**6))) + eps
             else:
                 E_LJi[d] = 0
         E_walls[incr] = E_LJi[0] + E_LJi[1]
