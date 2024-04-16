@@ -1,13 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
-from numba import njit
-from initialisation.positions import *
-from initialisation.vitesses import *
-from dyna.dynam import *
-from dyna.walls import *
 from filemanager.write import *
 from filemanager.read import *
+from mesures.Measure import *
 
 
 save_folder = r'C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats'
@@ -28,7 +24,36 @@ cutoff = float(param["cutoff"])
 rayon = float(param["rayon"])
 save_interval = int(param["save_interval"])
 
+
 r, v, t = get_posvittime(r"C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats\test0", D, nb_part, nb_pas, save_interval)
+
+len = np.size(r, axis=0)
+E_LJ = np.empty((len), np.float64)
+E_LJwalls = np.empty((len), np.float64)
+E_C = np.empty((len), np.float64)
+
+for i in range(len):
+    E_LJ[i] = sumLJpot(r[i], sig, eps, cutoff, nb_part)
+    E_LJwalls[i] = sumLJwalls(r[i], sig, eps, nb_part, L_box)
+    E_C[i] = sumEC(v[i], m_part, nb_part)
+
+E_tot = E_LJ + E_LJwalls + E_C
+print(t)
+
+plt.figure(figsize=(12,8))
+plt.plot(t, E_tot, 'r-', label='E_tot')
+plt.plot(t, E_LJ, 'g-', label='E_LJ')
+plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
+plt.plot(t, E_C, 'm-', label='E_Cin')
+plt.legend()
+plt.show()
+
+
+
+
+
+
+
 
 
 
