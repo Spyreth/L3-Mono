@@ -3,8 +3,7 @@ from numba import njit
 
 
 @njit
-def LJpot(r, i, sig, eps, cut_off, nb_part):
-    
+def LJpot(r, i, sig, eps, cut_off, nb_part, trace):
     """
     Calcul du potentiel de Lennard-Jones pour une particule
 
@@ -13,6 +12,7 @@ def LJpot(r, i, sig, eps, cut_off, nb_part):
         i (float): Index de la particule
         sig (float): Taille des particules
         eps (float): Paramètre de Lennard-Jones
+        trace (array): array de bool gardant une trace des interactions pour ne pas les compter deux fois
 
     Returns:
         LJP (float): Energie potentielle de Lennard-Jones de la i-eme particule
@@ -22,12 +22,13 @@ def LJpot(r, i, sig, eps, cut_off, nb_part):
     dpart_calc_cut = np.empty((nb_part-1,1), dtype=float)
 
     for j in range(nb_part):
-        if j != i:
+        if j != i and (trace[i, j]==0):
             dist_xy = r[j] - r[i]
             dist = np.sqrt(dist_xy[0]**2 + dist_xy[1]**2)
             if dist <= cut_off:
                 dpart_calc_cut[incr] = dist
                 incr +=1
+            trace[i,j] = 1
 
     dpart_calc_cut = dpart_calc_cut[:incr]
             
@@ -36,6 +37,7 @@ def LJpot(r, i, sig, eps, cut_off, nb_part):
     r12 = (sig/dpart_calc_cut)**12
     LJP = 4.0*eps*(r12-r6)
     LJP = np.sum(LJP)  #somme des potentiels
+    
     return LJP
 
 
@@ -62,9 +64,10 @@ def LJpotWalls(r, sig, eps, nb_part, L):
 
 @njit
 def sumLJpot(r, sig, eps, cut_off, nb_part):
+    trace = np.zeros((nb_part,nb_part), dtype=np.int32)
     E_LJ = np.empty((nb_part, 1, 1), np.float64)
     for i in range(nb_part):
-        E_LJ[i] = LJpot(r, i, sig, eps, cut_off, nb_part)
+        E_LJ[i] = LJpot(r, i, sig, eps, cut_off, nb_part, trace)
     sum = np.sum(E_LJ)
     return sum
 

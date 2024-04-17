@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from matplotlib import animation
 from numba import njit
 from initialisation.positions import *
@@ -9,12 +10,12 @@ from dyna.walls import *
 from filemanager.write import *
 
 # Constantes
-L_box = 40  #bord boite en Angstrom
+L_box = 20  #bord boite en Angstrom
 D = 2 #dimension
-nb_part = 2  #nombre de particules
+nb_part = 1  #nombre de particules
 dt = 0.0001  #pas de temps en ps
 m_part = 20  #masse particules en ua
-nb_pas = 1000000
+nb_pas = 200000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 3.4 #paramètres de distance du potentiel en Angstrom
@@ -25,12 +26,13 @@ cutoff = 3.2*sig
 # Paramètres de l'animation
 rayon = 1
 save_interval = 1000
-save_folder = r'C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats'
+script_directory = os.path.dirname(os.path.abspath(__file__))
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
 results_name = r'\test0'
 
 # Initialisation des positions et des vitesses
-r, nb_part = pos_cristal2D(5, L_box)
-v = random_vit(nb_part, L_box, D)
+r = np.array([[10,10]])
+v = np.array([[0,10]])
 
 # Initialisation des fichiers de sauvegarde
 csv_init(save_folder, results_name, 1, D)

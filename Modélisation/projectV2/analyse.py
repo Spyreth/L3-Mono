@@ -1,12 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 from matplotlib import animation
 from filemanager.write import *
 from filemanager.read import *
 from mesures.Measure import *
 
 
-save_folder = r'C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
 results_name = r'\test0'
 
 
@@ -25,7 +26,7 @@ rayon = float(param["rayon"])
 save_interval = int(param["save_interval"])
 
 
-r, v, t = get_posvittime(r"C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats\test0", D, nb_part, nb_pas, save_interval)
+r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
 
 len = np.size(r, axis=0)
 E_LJ = np.empty((len), np.float64)
@@ -38,16 +39,15 @@ for i in range(len):
     E_C[i] = sumEC(v[i], m_part, nb_part)
 
 E_tot = E_LJ + E_LJwalls + E_C
-print(t)
+
 
 plt.figure(figsize=(12,8))
 plt.plot(t, E_tot, 'r-', label='E_tot')
-plt.plot(t, E_LJ, 'g-', label='E_LJ')
-plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
-plt.plot(t, E_C, 'm-', label='E_Cin')
+#plt.plot(t, E_LJ, 'g-', label='E_LJ')
+#plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
+#plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.legend()
 plt.show()
-
 
 
 
@@ -95,6 +95,6 @@ anim = animation.FuncAnimation(fig, animate, frames=int(nb_pas/save_interval), i
 
 
 writergif = animation.PillowWriter(fps=20)
-anim.save('C:\GIT REPOS\L3-Mono\Modélisation\projectV2\Resultats' + results_name + '\gaz.gif', writer=writergif)
+anim.save(save_folder + results_name + '\gaz.gif', writer=writergif)
 #writergif = animation.FFMpegWriter(fps=20)
 #anim.save('gaz.mp4', fps=20, dpi=200)

@@ -25,9 +25,9 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
     for elem in r:
         for d in range(D):
             if elem[d] < cut:
-                force[incr][d] = -24*eps*((sig**6)*(1/(elem[d]**7)) - 2*(sig**12)*(1/elem[d]**13))
+                force[incr][d] = -24*eps*((sig**6)*(1/(elem[d]**7)) - 2*(sig**12)*(1/elem[d]**13)) + eps
             elif elem[d] > cut2:
-                force[incr][d] = 24*eps*((sig**6)*(1/((L-elem[d])**7)) - 2*(sig**12)*((1/(L-elem[d])**13)))
+                force[incr][d] = 24*eps*((sig**6)*(1/((L-elem[d])**7)) - 2*(sig**12)*((1/(L-elem[d])**13))) + eps
             else:
                 force[incr][d] = 0
         incr += 1

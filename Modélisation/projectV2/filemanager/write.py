@@ -21,10 +21,6 @@ def csv_init(folder, name, nb_part, D):
             writer = csv.writer(file)
             writer.writerow(header)
 
-    with open((folder+name+r'\time.csv'), 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow('t')
-
 
 
 def write_to_csv(file, data):
