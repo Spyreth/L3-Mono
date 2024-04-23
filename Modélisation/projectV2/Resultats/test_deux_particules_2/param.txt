@@ -1,11 +1,11 @@
 L: 20
 D: 2
-nb_part: 1
-dt: 0.0001
+nb_part: 2
+dt: 1e-06
 m_part: 20
-nb_pas: 200000
+nb_pas: 4000000
 sig: 3.4
 eps: 120
 cutoff: 10.88
 rayon: 1
-save_interval: 1000
+save_interval: 10000

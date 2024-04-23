@@ -1,0 +1,11 @@
+L: 40
+D: 2
+nb_part: 25
+dt: 1e-05
+m_part: 20
+nb_pas: 500000
+sig: 3.4
+eps: 120
+cutoff: 10.88
+rayon: 1
+save_interval: 5000

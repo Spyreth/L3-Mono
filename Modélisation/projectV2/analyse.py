@@ -8,7 +8,7 @@ from mesures.Measure import *
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\test0'
+results_name = r'\test17'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')
@@ -33,8 +33,9 @@ E_LJ = np.empty((len), np.float64)
 E_LJwalls = np.empty((len), np.float64)
 E_C = np.empty((len), np.float64)
 
+
 for i in range(len):
-    E_LJ[i] = sumLJpot(r[i], sig, eps, cutoff, nb_part)
+    E_LJ[i] = sumLJpotsyst(r[i], sig, eps, cutoff, nb_part)
     E_LJwalls[i] = sumLJwalls(r[i], sig, eps, nb_part, L_box)
     E_C[i] = sumEC(v[i], m_part, nb_part)
 
@@ -47,8 +48,8 @@ plt.plot(t, E_tot, 'r-', label='E_tot')
 #plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
 #plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.legend()
+plt.savefig(save_folder+results_name+r'\total energy.png')
 plt.show()
-
 
 
 
