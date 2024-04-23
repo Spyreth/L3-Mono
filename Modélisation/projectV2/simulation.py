@@ -28,6 +28,7 @@ L_box = 10  #bord boite en nm
 D = 2 #dimension
 nb_part = 2  #nombre de particules
 dt = 0.0001  #pas de temps en ps
+T = 300 #température en Kelvin
 m_part = 39.95  #masse particules en ua
 nb_pas = 200000
 
@@ -43,11 +44,11 @@ rayon = 0.1
 save_interval = 1000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\testscale'
+results_name = r'\testscale3'
 
 # Initialisation des positions et des vitesses
 r, nb_part = pos_cristal2D(5, L_box)
-v = random_vit(nb_part, L_box, D)
+v = vit_temp(nb_part, T, Kb_scaled, m_part, D)
 
 # Initialisation des fichiers de sauvegarde
 csv_init(save_folder, results_name, 1, D)

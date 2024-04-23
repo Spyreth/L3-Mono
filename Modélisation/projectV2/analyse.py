@@ -8,7 +8,7 @@ from mesures.Measure import *
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\testscale'
+results_name = r'\testscale3'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')

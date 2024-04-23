@@ -31,7 +31,7 @@ def vit_temp(n, T, kb, m, D):
     Returns:
         v_0 (D-d array): vitesses nes n particules à D-dim
     """
-    v_0 = np.ones(n,D)*np.sqrt(3*kb*T/m)
+    v_0 = np.zeros((n,D))+np.sqrt(3*kb*T/m)
     return v_0
 
 
