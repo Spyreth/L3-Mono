@@ -17,6 +17,25 @@ def random_vit(n, L_box, D):
     return v_0
 
 
+@njit
+def vit_temp(n, T, kb, m, D):
+    """Initialise les vitesses des particules en fonction de la température
+
+    Args:
+        n (int): nb de particules
+        T (int): température initiale du système
+        kb (int): constante de Boltzmann dans les bonnes unités
+        m (int): masse des particules
+        D (int): dimension
+
+    Returns:
+        v_0 (D-d array): vitesses nes n particules à D-dim
+    """
+    v_0 = np.ones(n,D)*np.sqrt(3*kb*T/m)
+    return v_0
+
+
+
 if __name__ == "__main__":
     L_box = 100
     D = 2

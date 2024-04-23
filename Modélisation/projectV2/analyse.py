@@ -8,7 +8,7 @@ from mesures.Measure import *
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\test17'
+results_name = r'\testscale'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')
@@ -49,7 +49,6 @@ plt.plot(t, E_tot, 'r-', label='E_tot')
 #plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\total energy.png')
-plt.show()
 
 
 
