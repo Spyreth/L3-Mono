@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from initialisation.vitesses import *
 
 eps = 1
 sig = 1

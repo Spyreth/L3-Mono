@@ -18,7 +18,7 @@ def random_vit(n, L_box, D):
 
 
 @njit
-def vit_temp(n, T, kb, m, D):
+def vit_temp(n, T, kb, m):
     """Initialise les vitesses des particules en fonction de la température
 
     Args:
@@ -31,7 +31,10 @@ def vit_temp(n, T, kb, m, D):
     Returns:
         v_0 (D-d array): vitesses nes n particules à D-dim
     """
-    v_0 = np.zeros((n,D))+np.sqrt(3*kb*T/m)
+    angles = np.random.uniform(0, 2*np.pi, n)
+    x = np.cos(angles)
+    y = np.sin(angles)
+    v_0 = np.column_stack((x,y))*np.sqrt(3*kb*T/m)
     return v_0
 
 

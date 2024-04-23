@@ -48,7 +48,7 @@ results_name = r'\testscale3'
 
 # Initialisation des positions et des vitesses
 r, nb_part = pos_cristal2D(5, L_box)
-v = vit_temp(nb_part, T, Kb_scaled, m_part, D)
+v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
 csv_init(save_folder, results_name, 1, D)
