@@ -36,7 +36,7 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
 
 
 @njit
-def reflectBC(r_0, v_0, nb_part, L_box, D, rayon):
+def reflectBC(r_0, v_0, nb_part, m_part, L_box, D, rayon):
     """
     Applique les conditions limites d'une boîte solide (rebond type billard)
 
@@ -49,6 +49,7 @@ def reflectBC(r_0, v_0, nb_part, L_box, D, rayon):
         r_1 (array): positions des particules à t1 corrigée
     """
     
+    delta_p = 0
     r0 = r_0
     v0 = v_0
     
@@ -58,10 +59,12 @@ def reflectBC(r_0, v_0, nb_part, L_box, D, rayon):
             if r0[i][j]<rayon:
                 r0[i][j] = -r0[i][j]+2*rayon
                 v0[i][j] = -v0[i][j]
+                delta_p += 2*m_part*v0[i][j]
             if r0[i][j]>(L_box-rayon):
                 r0[i][j] = 2.0*L_box-r0[i][j]-2*rayon
                 v0[i][j] = -v0[i][j]
-    return r0, v0
+                delta_p += -2*m_part*v0[i][j]
+    return r0, v0, delta_p
 
 
 @njit

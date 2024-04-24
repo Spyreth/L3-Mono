@@ -38,7 +38,6 @@ plt.plot(logd2, logr2, 'k.', label='log(résistance) selon log(d)')
 plt.plot(logx2, logy2, 'r-', label='linear fit in loglog')
 plt.plot(logd, logr, 'k.', label='log(résistance) selon log(d)')
 plt.plot(logx, logy, 'r-', label='linear fit in loglog')
-plt.grid(True, linestyle=':', linewidth='0.5')
 plt.legend()
 plt.show()
 

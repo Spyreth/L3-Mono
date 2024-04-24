@@ -129,6 +129,29 @@ def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
     return r_1, v_1
 
 
+@njit
+def update_billard(r_0, v_0, pas, m, nb_part, rayon, D, L_box):
+    """Calcule les positions et vitesses à t+1 à partir de t en utilisant verlet sans interactions entre les particules
+
+    Args:
+        r_0 (array): positions des particules à t0
+        v_0 (array): vitesses des particules à t0
+        pas (int): pas de temps d'intégration
+        m (int): masse des particules
+        nb_part (int): nb de particules
+        rayon (int): rayon des particules
+        D (int): nombre de dimensions
+        L_box (int): taille de la boîte
+
+    Returns:
+        r_1 (array): positions des particules à t1
+        v_1 (array): vitesses des particules à t1
+    """
+    r_1, v_1 = verlet(r_0, v_0, 0, pas, m)
+    r_1, v_1, delta_p = reflectBC(r_1, v_1, nb_part, m, L_box, D, rayon)
+    return r_1, v_1, delta_p
+
+
 
 if __name__ == "__main__":
     print("Ceci n'est pas un script mais un package.")

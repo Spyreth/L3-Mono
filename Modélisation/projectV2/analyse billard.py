@@ -7,8 +7,8 @@ from filemanager.read import *
 from mesures.Measure import *
 
 
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\testscale3'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats billard'
+results_name = r'\testscaleA'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')
@@ -24,31 +24,25 @@ eps = float(param["eps"])
 cutoff = float(param["cutoff"])
 rayon = float(param["rayon"])
 save_interval = int(param["save_interval"])
+pressure_calc_interval = int(param["pressure_calc_interval"])
 
 
 r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
+pressure = get_pressure_billard(save_folder+results_name)
 
 len = np.size(r, axis=0)
-E_LJ = np.empty((len), np.float64)
-E_LJwalls = np.empty((len), np.float64)
 E_C = np.empty((len), np.float64)
 T = np.empty((len), np.float64)
 
 
 for i in range(len):
-    E_LJ[i] = sumLJpotsyst(r[i], sig, eps, cutoff, nb_part)
-    E_LJwalls[i] = sumLJwalls(r[i], sig, eps, nb_part, L_box)
     E_C[i] = sumEC(v[i], m_part, nb_part)
     T[i] = calcTemp(v[i], m_part, 0.007831)
 
-E_tot = E_LJ + E_LJwalls + E_C
-
+E_tot = E_C
 
 plt.figure(figsize=(12,8))
 plt.plot(t, E_tot, 'r-', label='E_tot')
-#plt.plot(t, E_LJ, 'g-', label='E_LJ')
-#plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
-#plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\total energy.png')
 
@@ -56,6 +50,11 @@ plt.figure(figsize=(12,8))
 plt.plot(t, T, 'r-', label='Température')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\Temperature.png')
+
+plt.figure(figsize=(12,8))
+plt.plot(np.linspace(0, nb_pas*dt, int(nb_pas*dt/pressure_calc_interval)), pressure, 'r-', label='Pression')
+plt.legend()
+plt.savefig(save_folder+results_name+r'\Pression.png')
 
 
 

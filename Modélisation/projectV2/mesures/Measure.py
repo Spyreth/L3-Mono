@@ -69,6 +69,13 @@ def sumLJwalls(r, sig, eps, nb_part, L):
     E = np.sum(E_walls)
     return E
 
+@njit
+def calcTemp(v, m, kb):
+    vit_abs2 = v.T[0]**2 + v.T[1]**2
+    T = m*np.mean(vit_abs2)/3/kb
+    return T
+    
+
 
 
 

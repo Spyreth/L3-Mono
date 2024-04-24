@@ -30,6 +30,11 @@ def get_param(folder):
     return param
 
 
+def get_pressure_billard(folder):
+    pressure = pd.read_csv((folder + r"\pressure.csv"), header=None).values
+    return pressure
+
+
 
 if __name__ == "__main__":
     print("Ceci n'est pas un script mais un package.")
