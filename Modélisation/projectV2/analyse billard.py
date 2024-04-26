@@ -7,8 +7,8 @@ from filemanager.read import *
 from mesures.Measure import *
 
 
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats billard'
-results_name = r'\testscaleA'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
+results_name = r'\testpressure'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')
@@ -52,7 +52,7 @@ plt.legend()
 plt.savefig(save_folder+results_name+r'\Temperature.png')
 
 plt.figure(figsize=(12,8))
-plt.plot(np.linspace(0, nb_pas*dt, int(nb_pas*dt/pressure_calc_interval)), pressure, 'r-', label='Pression')
+plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pressure, 'r-', label='Pression')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\Pression.png')
 
