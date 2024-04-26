@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from matplotlib import animation
-from filemanager.read import get_param, get_posvittime, get_pressure_billard
+from filemanager.read import get_param, get_posvittime, get_pressure
 from mesures.Measure import sumEC, calcTemp
 
 
@@ -28,7 +28,7 @@ kb = float(param['Kb'])
 
 
 r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
-pressure = get_pressure_billard(save_folder+results_name)
+pressure = get_pressure(save_folder+results_name)
 
 len = np.size(r, axis=0)
 E_C = np.empty((len), np.float64)

@@ -119,14 +119,14 @@ def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
         v_1 (array): vitesses des particules à t1
     """
     force_LJ = dLJpot(r_0, sig, eps, cutoff, nb_part, D)
-    force_wall = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
+    force_wall, force_wall_tot = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
     #force_wall = testPot(r_0, nb_part, D, sig, L_box, 10000)
     #force_wall = 0
 
     force = force_LJ+force_wall
 
     r_1, v_1 = verlet(r_0, v_0, force, pas, m)
-    return r_1, v_1
+    return r_1, v_1, force_wall_tot
 
 
 @njit

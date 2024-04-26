@@ -36,7 +36,7 @@ def datasave(folder, name, r, v, t, D):
         write_to_csv((folder + f"\{name}" + fr"\vit_{d}.csv"), v.T[d])
 
 
-def pressureSaveBillard(folder, name, pressure):
+def pressureSave(folder, name, pressure):
     write_to_csv((folder + f"\{name}" + r"\pressure.csv"), [pressure])
 
 

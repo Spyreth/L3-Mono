@@ -29,7 +29,7 @@ def get_param(folder):
     return param
 
 
-def get_pressure_billard(folder):
+def get_pressure(folder):
     pressure = pd.read_csv((folder + r"\pressure.csv"), header=None).values
     return pressure
 

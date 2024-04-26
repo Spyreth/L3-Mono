@@ -4,7 +4,7 @@ from numba import njit
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import random_vit, vit_temp
 from dyna.dynam import update_billard
-from filemanager.write import csv_init, save_parameters, datasave, pressureSaveBillard
+from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
 
@@ -59,7 +59,7 @@ for i in range(nb_pas):
 
     if i % pressure_calc_interval == 0:
         pressure = delta_p_tot/(pressure_calc_interval*dt*4*L_box)
-        pressureSaveBillard(save_folder, results_name, pressure)
+        pressureSave(save_folder, results_name, pressure)
         delta_p_tot = 0
 
 print(f'\rAvancement calculs: Fin')

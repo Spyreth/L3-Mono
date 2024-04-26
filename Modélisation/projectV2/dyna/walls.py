@@ -32,7 +32,9 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
                 force[incr][d] = 0
         incr += 1
 
-    return force
+    force_tot = np.sum(np.abs(force))
+
+    return force, force_tot
 
 
 @njit
