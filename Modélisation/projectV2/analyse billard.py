@@ -8,7 +8,7 @@ from mesures.Measure import *
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
-results_name = r'\testpressure'
+results_name = r'\testpressure2'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')
@@ -25,6 +25,7 @@ cutoff = float(param["cutoff"])
 rayon = float(param["rayon"])
 save_interval = int(param["save_interval"])
 pressure_calc_interval = int(param["pressure_calc_interval"])
+kb = float(param['Kb'])
 
 
 r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
@@ -37,24 +38,42 @@ T = np.empty((len), np.float64)
 
 for i in range(len):
     E_C[i] = sumEC(v[i], m_part, nb_part)
-    T[i] = calcTemp(v[i], m_part, 0.007831)
+    T[i] = calcTemp(v[i], m_part, kb)
 
 E_tot = E_C
+pV = pressure*(L_box**2)
+NkbT = nb_part*kb*T
 
 plt.figure(figsize=(12,8))
 plt.plot(t, E_tot, 'r-', label='E_tot')
+plt.xlabel('t (ps)')
+plt.ylabel('E')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\total energy.png')
 
 plt.figure(figsize=(12,8))
 plt.plot(t, T, 'r-', label='Température')
+plt.xlabel('t (ps)')
+plt.ylabel('T (K)')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\Temperature.png')
 
 plt.figure(figsize=(12,8))
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pressure, 'r-', label='Pression')
+plt.xlabel('t (ps)')
+plt.ylabel('p')
 plt.legend()
 plt.savefig(save_folder+results_name+r'\Pression.png')
+
+plt.figure(figsize=(12,8))
+plt.plot(t, NkbT, 'r-', label='NKbT')
+plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pV, 'b-', label='pV')
+plt.xlabel('t (ps)')
+plt.ylabel('pV, NKbT')
+plt.legend()
+plt.savefig(save_folder+results_name+r'\Loi des gaz parfaits.png')
+
+
 
 
 

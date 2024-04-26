@@ -10,13 +10,13 @@ from filemanager.write import *
 
 
 # Constantes
-L_box = 10  #bord boite en nm
+L_box = 20  #bord boite en nm
 D = 2 #dimension
-nb_part = 200  #nombre de particules
+nb_part = 300  #nombre de particules
 dt = 0.0001  #pas de temps en ps
-T = 300 #température en Kelvin
+T = 1000 #température en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 5000000
+nb_pas = 10000000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -27,11 +27,11 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 10000
-pressure_calc_interval = 100000
+save_interval = 20000
+pressure_calc_interval = 200000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
-results_name = r'\testpressure'
+results_name = r'\testpressure2'
 
 # Initialisation des positions et des vitesses
 r = random_pos(nb_part, L_box, D)
@@ -39,7 +39,7 @@ v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
 csv_init(save_folder, results_name, 1, D)
-save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval)
+save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval, Kb_scaled)
 
 
 progress_affichage = nb_pas/100 #pour afficher le progrès tous les %

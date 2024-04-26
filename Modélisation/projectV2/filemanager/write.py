@@ -41,7 +41,7 @@ def pressureSaveBillard(folder, name, pressure):
     write_to_csv((folder + f"\{name}" + r"\pressure.csv"), [pressure])
 
 
-def save_parameters(folder, sim_name, L, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval):
+def save_parameters(folder, sim_name, L, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval, kb):
      with open((folder+sim_name+r"\param.txt"), 'w') as f:
         # Écriture des paramètres dans le fichier
         f.write(f"L: {L}\n")
@@ -56,6 +56,7 @@ def save_parameters(folder, sim_name, L, D, nb_part, dt, m_part, nb_pas, sig, ep
         f.write(f"rayon: {rayon}\n")
         f.write(f"save_interval: {save_interval}\n")
         f.write(f"pressure_calc_interval: {pressure_calc_interval}\n")
+        f.write(f"Kb: {kb}\n")
 
 
 

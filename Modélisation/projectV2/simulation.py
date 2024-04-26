@@ -38,7 +38,7 @@ v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
 csv_init(save_folder, results_name, 1, D)
-save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, 0)
+save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, 0, Kb_scaled)
 
 
 progress_affichage = nb_pas/100 #pour afficher le progrès tous les %

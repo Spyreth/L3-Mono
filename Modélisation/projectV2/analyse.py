@@ -24,6 +24,7 @@ eps = float(param["eps"])
 cutoff = float(param["cutoff"])
 rayon = float(param["rayon"])
 save_interval = int(param["save_interval"])
+kb = int(param['Kb'])
 
 
 r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
@@ -39,7 +40,7 @@ for i in range(len):
     E_LJ[i] = sumLJpotsyst(r[i], sig, eps, cutoff, nb_part)
     E_LJwalls[i] = sumLJwalls(r[i], sig, eps, nb_part, L_box)
     E_C[i] = sumEC(v[i], m_part, nb_part)
-    T[i] = calcTemp(v[i], m_part, 0.007831)
+    T[i] = calcTemp(v[i], m_part, kb)
 
 E_tot = E_LJ + E_LJwalls + E_C
 
