@@ -2,13 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from matplotlib import animation
-from filemanager.write import *
-from filemanager.read import *
-from mesures.Measure import *
+from filemanager.read import get_param, get_posvittime, get_pressure_billard
+from mesures.Measure import sumEC, calcTemp
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
-results_name = r'\testpressure2'
+results_name = r'\testpressure4'
 
 
 param = get_param(save_folder+results_name+r'\param.txt')

@@ -2,9 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from matplotlib import animation
-from filemanager.write import *
-from filemanager.read import *
-from mesures.Measure import *
+from filemanager.read import get_param, get_posvittime
+from mesures.Measure import sumEC, sumLJpotsyst, sumLJwalls, calcTemp
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'

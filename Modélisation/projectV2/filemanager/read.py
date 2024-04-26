@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import csv
 
 
 def get_posvittime(folder, D, nb_part, nb_pas, save_interval):

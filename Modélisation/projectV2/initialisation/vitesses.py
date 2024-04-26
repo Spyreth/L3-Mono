@@ -34,7 +34,7 @@ def vit_temp(n, T, kb, m):
     angles = np.random.uniform(0, 2*np.pi, n)
     x = np.cos(angles)
     y = np.sin(angles)
-    v_0 = np.column_stack((x,y))*np.sqrt(3*kb*T/m)
+    v_0 = np.column_stack((x,y))*np.sqrt(2*kb*T/m)
     return v_0
 
 

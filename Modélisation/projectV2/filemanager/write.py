@@ -1,6 +1,5 @@
 import csv
 import os
-from numba import njit
 
 
 def csv_init(folder, name, nb_part, D):

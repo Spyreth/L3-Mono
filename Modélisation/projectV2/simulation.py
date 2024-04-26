@@ -1,11 +1,10 @@
 import numpy as np
 import os
 from numba import njit
-from initialisation.positions import *
-from initialisation.vitesses import *
-from dyna.dynam import *
-from dyna.walls import *
-from filemanager.write import *
+from initialisation.positions import random_pos, pos_cristal2D
+from initialisation.vitesses import vit_temp, random_vit
+from dyna.dynam import update
+from filemanager.write import csv_init, save_parameters, datasave, pressureSaveBillard
 
 
 

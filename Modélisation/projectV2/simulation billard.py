@@ -1,11 +1,10 @@
 import numpy as np
 import os
 from numba import njit
-from initialisation.positions import *
-from initialisation.vitesses import *
-from dyna.dynam import *
-from dyna.walls import *
-from filemanager.write import *
+from initialisation.positions import random_pos, pos_cristal2D
+from initialisation.vitesses import random_vit, vit_temp
+from dyna.dynam import update_billard
+from filemanager.write import csv_init, save_parameters, datasave, pressureSaveBillard
 
 
 
@@ -14,9 +13,9 @@ L_box = 20  #bord boite en nm
 D = 2 #dimension
 nb_part = 300  #nombre de particules
 dt = 0.0001  #pas de temps en ps
-T = 1000 #température en Kelvin
+T = 300 #température en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 10000000
+nb_pas = 5000000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -27,11 +26,11 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 20000
-pressure_calc_interval = 200000
+save_interval = 10000
+pressure_calc_interval = 100000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
-results_name = r'\testpressure2'
+results_name = r'\testpressure4'
 
 # Initialisation des positions et des vitesses
 r = random_pos(nb_part, L_box, D)
@@ -44,6 +43,7 @@ save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas
 
 progress_affichage = nb_pas/100 #pour afficher le progrès tous les %
 delta_p_tot = 0 #pour calculer la pression
+
 
 for i in range(nb_pas):
     if i % save_interval == 0:

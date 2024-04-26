@@ -67,39 +67,6 @@ def reflectBC(r_0, v_0, nb_part, m_part, L_box, D, rayon):
     return r0, v0, delta_p
 
 
-@njit
-def testPot(r, nb_part, D, sig, L, a):
-    """
-    Force linéaire test pour les murs, dérivant d'un potentiel quadratique
-
-    Args:
-        r (array): position des particules
-        nb_part (int): nombre de particules
-        D (int): nombre de dimensions
-        sig (int): paramètre du puit de LJ
-        L (int): taille de la boîte
-        a (int): paramètre de la force linéaire en a*x
-
-    Returns:
-        array: force appliquée sur les particules dûe aux murs
-    """
-
-    force = np.empty((nb_part, D), dtype=float)
-    incr = 0
-    cut = sig
-    cut2 = L - sig
-    for elem in r:
-        for d in range(D):
-            if elem[d] < cut:
-                force[incr][d] = -a*elem[d] + a*sig
-            elif elem[d] > cut2:
-                force[incr][d] = a*(L-elem[d]) - a*sig
-            else:
-                force[incr][d] = 0
-        incr += 1
-    return force
-
-
 
 if __name__ == "__main__":
     print("Ceci n'est pas un script mais un package.")

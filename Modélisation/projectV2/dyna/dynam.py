@@ -1,6 +1,6 @@
 import numpy as np
 from numba import njit
-from dyna.walls import *
+from dyna.walls import reflectBC, LJ_walls
 
 
 
