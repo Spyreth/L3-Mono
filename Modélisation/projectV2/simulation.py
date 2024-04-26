@@ -1,6 +1,4 @@
-import numpy as np
 import os
-from numba import njit
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
 from dyna.dynam import update
