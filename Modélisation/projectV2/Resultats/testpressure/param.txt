@@ -1,0 +1,13 @@
+L: 20
+D: 2
+nb_part: 100
+dt: 0.001
+m_part: 39.95
+nb_pas: 400000
+sig: 0.34
+eps: 0.9381537999999999
+cutoff: 1.088
+rayon: 0.1
+save_interval: 500
+pressure_calc_interval: 4000
+Kb: 0.007831

@@ -6,11 +6,11 @@ from filemanager.read import get_param, get_posvittime, get_pressure
 from mesures.Measure import sumEC, sumLJpotsyst, sumLJwalls, calcTemp
 
 
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\testpressure'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
+results_name = r'/testpressure'
 
 
-param = get_param(save_folder+results_name+r'\param.txt')
+param = get_param(save_folder+results_name+r'/param.txt')
 # Utilisation des paramètres récupérés
 L_box = float(param["L"])
 D = int(param["D"])
@@ -55,21 +55,21 @@ plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.xlabel('t (ps)')
 plt.ylabel('E')
 plt.legend()
-plt.savefig(save_folder+results_name+r'\total energy.png')
+plt.savefig(save_folder+results_name+r'/total energy.png')
 
 plt.figure(figsize=(12,8))
 plt.plot(t, T, 'r-', label='Température')
 plt.xlabel('t (ps)')
 plt.ylabel('T (K)')
 plt.legend()
-plt.savefig(save_folder+results_name+r'\Temperature.png')
+plt.savefig(save_folder+results_name+r'/Temperature.png')
 
 plt.figure(figsize=(12,8))
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pressure, 'r-', label='Pression')
 plt.xlabel('t (ps)')
 plt.ylabel('p')
 plt.legend()
-plt.savefig(save_folder+results_name+r'\Pression.png')
+plt.savefig(save_folder+results_name+r'/Pression.png')
 
 plt.figure(figsize=(12,8))
 plt.plot(t, NkbT, 'r-', label='NKbT')
@@ -77,7 +77,7 @@ plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pV, 'b
 plt.xlabel('t (ps)')
 plt.ylabel('pV, NKbT')
 plt.legend()
-plt.savefig(save_folder+results_name+r'\Loi des gaz parfaits.png')
+plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
 
 
 
@@ -105,7 +105,7 @@ def animate(i):
 
     if i % 50 == 0:
         progress = round(i / nb_pas * save_interval * 100, 1)
-        print(f'\rAvancement animation: {progress}%')
+        print(f'Avancement animation: {progress}%')
 
     return particles 
 

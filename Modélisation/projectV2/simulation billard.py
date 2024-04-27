@@ -29,8 +29,8 @@ rayon = 0.1
 save_interval = 10000
 pressure_calc_interval = 100000
 script_directory = os.path.dirname(os.path.abspath(__file__))
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultatsbillard'
-results_name = r'\testpressure4'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultatsbillard'
+results_name = r'/testpressure4'
 
 # Initialisation des positions et des vitesses
 r = random_pos(nb_part, L_box, D)
@@ -52,7 +52,7 @@ for i in range(nb_pas):
 
     if i % progress_affichage == 0:
         progress = round(i / nb_pas * 100)
-        print(f'\rAvancement calculs: {progress}%')
+        print(f'Avancement calculs: {progress}%')
 
     r, v, delta_p = update_billard(r, v, dt, m_part, nb_part, rayon, D, L_box)
     delta_p_tot += delta_p
@@ -62,4 +62,4 @@ for i in range(nb_pas):
         pressureSave(save_folder, results_name, pressure)
         delta_p_tot = 0
 
-print(f'\rAvancement calculs: Fin')
+print(f'Avancement calculs: Fin')

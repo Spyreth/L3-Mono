@@ -10,7 +10,7 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 L_box = 20  #bord boite en nm
 D = 2 #dimension
 nb_part = 2  #nombre de particules
-dt = 0.0001  #pas de temps en ps
+dt = 0.001  #pas de temps en ps
 T = 300 #température en Kelvin
 m_part = 39.95  #masse particules en ua
 nb_pas = 400000
@@ -24,11 +24,11 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 4000
-pressure_calc_interval = 10000
+save_interval = 500
+pressure_calc_interval = 4000
 script_directory = os.path.dirname(os.path.abspath(__file__))
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'\Resultats'
-results_name = r'\testpressure'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
+results_name = r'/testpressure'
 
 # Initialisation des positions et des vitesses
 r, nb_part = pos_cristal2D(10, L_box)
@@ -49,7 +49,7 @@ for i in range(nb_pas):
 
     if i % progress_affichage == 0:
         progress = round(i / nb_pas * 100)
-        print(f'\rAvancement calculs: {progress}%')
+        print(f'Avancement calculs: {progress}%')
 
     r, v, force_wall_tot = update(r, v, dt, m_part, nb_part, sig, eps, cutoff, D, L_box)
     f_sum += force_wall_tot
@@ -59,4 +59,4 @@ for i in range(nb_pas):
         pressureSave(save_folder, results_name, pressure)
         f_sum = 0
 
-print(f'\rAvancement calculs: Fin')
+print(f'Avancement calculs: Fin')
