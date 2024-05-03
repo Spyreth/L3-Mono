@@ -1,4 +1,5 @@
 import os
+import time
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
 from dyna.dynam import update
@@ -10,10 +11,10 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 L_box = 20  #bord boite en nm
 D = 2 #dimension
 nb_part = 2  #nombre de particules
-dt = 0.0001  #pas de temps en ps
-T = 300 #température en Kelvin
+dt = 0.00002  #pas de temps en ps
+T = 300 #température initiale en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 10000000
+nb_pas = 5000000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -24,14 +25,14 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 10000
+save_interval = 20000
 pressure_calc_interval = 100000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
-results_name = r'/testpressure2'
+results_name = r'/testLJ2_20x20'
 
 # Initialisation des positions et des vitesses
-r, nb_part = pos_cristal2D(10, L_box)
+r, nb_part = pos_cristal2D(20, L_box)
 v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
@@ -45,7 +46,6 @@ f_sum = 0
 for i in range(nb_pas):
     if i % save_interval == 0:
         datasave(save_folder, results_name, r, v, i*dt, D)
-
 
     if i % progress_affichage == 0:
         progress = round(i / nb_pas * 100)

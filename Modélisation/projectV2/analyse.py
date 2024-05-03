@@ -7,7 +7,7 @@ from mesures.Measure import sumEC, sumLJpotsyst, sumLJwalls, calcTemp
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
-results_name = r'/testpressure2'
+results_name = r'/testLJ2_20x20'
 
 
 param = get_param(save_folder+results_name+r'/param.txt')
@@ -104,7 +104,7 @@ def animate(i):
         particles[j].center = (r[i,j, 0], r[i,j, 1])
 
     if i % 50 == 0:
-        progress = round(i / nb_pas * save_interval * 100, 1)
+        progress = round(i / nb_pas * save_interval * 100, 0)
         print(f'Avancement animation: {progress}%')
 
     return particles 

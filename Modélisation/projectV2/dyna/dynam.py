@@ -3,7 +3,6 @@ from numba import njit
 from dyna.walls import reflectBC, LJ_walls
 
 
-
 @njit
 def verlet(r0, v0, force, pas, m) :
     """Calcule les positions et vitesses à t+1 via verlet
@@ -97,6 +96,24 @@ def dLJpot(r0, sig, eps, cutoff, nb_part, D):
 
 
 
+@njit
+def dLJP_test(r0, sig, eps, cutoff, nb_part, D):
+
+    dLJP = np.empty((nb_part,D), dtype=float)
+    cutoff2 = cutoff**2
+    
+    for j in range(nb_part):
+        dist_xy = r0 - r0[j]
+        dist2 = dist_xy.T[0]**2 + dist_xy.T[1]**2
+        mask = ((dist2 <= cutoff2) & (dist2 > 0))  # Mask for particles within cutoff, excluding self
+        valid_indices = np.where(mask)[0]
+        dpart_cut = dist_xy[valid_indices]  # Assign valid distances
+        dpart_calc_cut = dist2[valid_indices]  # Assign valid calculated distances
+        dLJP[j] = -24.0*eps*np.dot(dpart_cut.T, 2.0*(sig**12)*(1.0/dpart_calc_cut)**7-(sig**6)*(1.0/dpart_calc_cut)**4)
+    
+    return dLJP
+
+
 
 @njit
 def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
@@ -118,7 +135,7 @@ def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
         r_1 (array): positions des particules à t1
         v_1 (array): vitesses des particules à t1
     """
-    force_LJ = dLJpot(r_0, sig, eps, cutoff, nb_part, D)
+    force_LJ = dLJP_test(r_0, sig, eps, cutoff, nb_part, D)
     force_wall, force_wall_tot = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
     #force_wall = testPot(r_0, nb_part, D, sig, L_box, 10000)
     #force_wall = 0
@@ -127,6 +144,7 @@ def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
 
     r_1, v_1 = verlet(r_0, v_0, force, pas, m)
     return r_1, v_1, force_wall_tot
+
 
 
 @njit
