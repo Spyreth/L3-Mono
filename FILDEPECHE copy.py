@@ -37,8 +37,8 @@ plt.scatter(log_sgs_d, log_sgs_m, label='Savage Gear Silencer', color='green')
 plt.scatter(log_x1_d, log_x1_m, label='Savage XL Strong G2', color='purple')
 
 # Étiquettes d'axe et titre
-plt.xlabel('log(Diamètre)')
-plt.ylabel('log(Masse de rupture)')
+plt.xlabel('log(Diamètre, kg)')
+plt.ylabel('log(Masse de rupture, kg)')
 plt.title('Graphe log-log de la masse de rupture en fonction du diamètre des fils de pêche')
 
 # Légende
@@ -46,53 +46,53 @@ plt.legend()
 plt.grid(True, linestyle=':', linewidth='0.5')
 
 #linreg
-slope_afg, intercept_afg, r_value, p_value, std_err = linregress(log_afg_d, log_afg_m)
-slope_tga, intercept_tga, r_value, p_value, std_err = linregress(log_tga_d, log_tga_m)
-slope_sgs, intercept_sgs, r_value, p_value, std_err = linregress(log_sgs_d, log_sgs_m)
-slope_x1, intercept_x1, r_value, p_value, std_err = linregress(log_x1_d, log_x1_m)
-slope_g2, intercept_g2, r_value, p_value, std_err = linregress(log_g2_d, log_g2_m)
+results_afg = linregress(log_afg_d, log_afg_m)
+results_tga = linregress(log_tga_d, log_tga_m)
+results_sgs = linregress(log_sgs_d, log_sgs_m)
+results_x1 = linregress(log_x1_d, log_x1_m)
+results_g2 = linregress(log_g2_d, log_g2_m)
 
 # print linreg
 models = {
-    'All Fishing Gear': [slope_afg,intercept_afg],
-    'Teklon Gold Advanced': [slope_tga,intercept_tga],
-    'Savage Gear Silencer': [slope_sgs,intercept_sgs],
-    'Savage XL Strong G2': [slope_x1,intercept_x1],
-    'Sufix Advance G2 Clear': [slope_g2,intercept_g2]
+    'All Fishing Gear': [results_afg.slope,results_afg.intercept,results_afg.stderr,results_afg.intercept_stderr],
+    'Teklon Gold Advanced': [results_tga.slope,results_tga.intercept,results_tga.stderr,results_tga.intercept_stderr],
+    'Savage Gear Silencer': [results_sgs.slope,results_sgs.intercept,results_sgs.stderr,results_sgs.intercept_stderr],
+    'Savage XL Strong G2': [results_x1.slope,results_x1.intercept,results_x1.stderr,results_x1.intercept_stderr],
+    'Sufix Advance G2 Clear': [results_g2.slope,results_g2.intercept,results_g2.stderr,results_g2.intercept_stderr]
 }
 
 # Afficher les coefficients de régression
 for model_name, model in models.items():
     print(f"Marque: {model_name}")
-    print(f"Coefficient de pente: {model[0]}")
-    print(f"Constante (intercept): {model[1]}")
+    print(f"Coefficient de pente: {model[0].round(2)} +- {model[2].round(2)}")
+    print(f"Constante (intercept): {model[1].round(2)} +- {model[3].round(2)}")
     print("\n")
 
-plt.plot(np.linspace(log_afg_d.min(), log_afg_d.max(), 100), np.linspace(log_afg_d.min(), log_afg_d.max(), 100)*slope_afg + intercept_afg, color='blue', linestyle='--')
-plt.plot(np.linspace(log_tga_d.min(), log_tga_d.max(), 100), np.linspace(log_tga_d.min(), log_tga_d.max(), 100)*slope_tga + intercept_tga, color='red', linestyle='--')
-plt.plot(np.linspace(log_sgs_d.min(), log_sgs_d.max(), 100), np.linspace(log_sgs_d.min(), log_sgs_d.max(), 100)*slope_sgs + intercept_sgs, color='green', linestyle='--')
-plt.plot(np.linspace(log_x1_d.min(), log_x1_d.max(), 100), np.linspace(log_x1_d.min(), log_x1_d.max(), 100)*slope_x1 + intercept_x1, color='purple', linestyle='--')
+plt.plot(np.linspace(log_afg_d.min(), log_afg_d.max(), 100), np.linspace(log_afg_d.min(), log_afg_d.max(), 100)*results_afg.slope + results_afg.intercept, color='blue', linestyle='--')
+plt.plot(np.linspace(log_tga_d.min(), log_tga_d.max(), 100), np.linspace(log_tga_d.min(), log_tga_d.max(), 100)*results_tga.slope + results_tga.intercept, color='red', linestyle='--')
+plt.plot(np.linspace(log_sgs_d.min(), log_sgs_d.max(), 100), np.linspace(log_sgs_d.min(), log_sgs_d.max(), 100)*results_sgs.slope + results_sgs.intercept, color='green', linestyle='--')
+plt.plot(np.linspace(log_x1_d.min(), log_x1_d.max(), 100), np.linspace(log_x1_d.min(), log_x1_d.max(), 100)*results_x1.slope + results_x1.intercept, color='purple', linestyle='--')
 plt.show()
 
 
 log_all_d = np.concatenate((log_afg_d, log_tga_d, log_sgs_d, log_x1_d))
 log_all_m = np.concatenate((log_afg_m, log_tga_m, log_sgs_m, log_x1_m))
-slope_all, intercept_all, r_value, p_value, std_err = linregress(log_all_d, log_all_m)
+result_all = linregress(log_all_d, log_all_m)
 
 
 print(f"Tous les fils :")
-print(f"Coefficient de pente: {slope_all}")
-print(f"Constante (intercept): {intercept_all}")
+print(f"Coefficient de pente: {result_all.slope.round(2)} +- {result_all.stderr.round(2)}")
+print(f"Constante (intercept): {result_all.intercept.round(2)} +- {result_all.intercept_stderr.round(2)}")
 print("\n")
 
 
 plt.figure(figsize=(12,8))
 plt.grid(True, linestyle=':', linewidth='0.5')
-plt.xlabel('log(Diamètre)')
-plt.ylabel('log(Masse de rupture)')
+plt.xlabel('log(Diamètre, mm)')
+plt.ylabel('log(Masse de rupture, kg)')
 plt.scatter(log_all_d, log_all_m, label='All fishing lines', color='blue', s=10)
-plt.plot(np.linspace(log_all_d.min(), log_all_d.max(), 100), np.linspace(log_all_d.min(), log_all_d.max(), 100)*slope_all + intercept_all, color='red', linestyle='--', label ='linear fit')
-plt.title('Graphe log-log de la masse de rupture en fonction du diamètre des fils de pêche')
+plt.plot(np.linspace(log_all_d.min(), log_all_d.max(), 100), np.linspace(log_all_d.min(), log_all_d.max(), 100)*result_all.slope + result_all.intercept, color='red', linestyle='--', label ='linear fit')
+plt.title('Ajustement linéaire moyennant tous les fils de pêche en log-log')
 plt.legend()
 plt.show()
 

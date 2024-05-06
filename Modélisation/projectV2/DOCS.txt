@@ -1,0 +1,13 @@
+r0 (array): positions des particules à t0
+v0 (array): vitesses des particules à t0
+force (array): forces s'appliquant sur les particules à t0
+pas (float): pas de temps de calcul
+m (float): masse des particules
+r (array): positions des particules
+sig (float): paramètre Lennard-Jones
+eps (float): profondeur du puit de LJ
+cutoff (float): limite a partir de laquelle le potentiel est pris = 0
+nb_part (int): nb de particules
+D (int): nb de dimensions
+L_box (float): taille de la boîte
+rayon (float): rayon des particules

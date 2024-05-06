@@ -1,9 +1,90 @@
+import numpy as np
+from numba import njit
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
-from dyna.dynam import verlet, dLJpot, LJ_walls
-from numba import njit
+from dyna.dynam import verlet, LJ_walls
 import time
-import numpy as np
+
+
+#########################################################################################################
+#####################ANCIEN CALCUL DE DLJPot pour une particule et pour n particules#####################
+#########################################################################################################
+
+@njit
+def dLJpot_i(r, i, sig, eps, cut_off, nb_part, D):
+    
+    """
+    Gradient du potentiel de Lennard-Jones pour une particule
+
+    Args:
+        r (array): positions des particules
+        i (float): index de la particule
+        sig (int): paramètre du puit de LJ
+        eps (float): profondeur du puit de LJ
+        cut_off (int): distance a partir de laquelle la force est nulle
+        nb_part (int): nombre de particules
+        D (int): nombre de dimensions
+
+    Returns:
+        dLJP (array): Gradient du potentiel de la particule
+    """
+
+    incr = 0
+    dpart_cut = np.empty((nb_part-1,D), dtype=float)
+    dpart_calc_cut = np.empty((nb_part-1,1), dtype=float)
+
+    for j in range(nb_part):
+        if j != i:
+            dist_xy = r[j] - r[i]
+            dist = np.sqrt(dist_xy[0]**2 + dist_xy[1]**2)
+            if dist <= cut_off:
+                dpart_cut[incr] = dist_xy   #on ajoute cet élément dans l'array
+                dpart_calc_cut[incr] = dist
+                incr +=1
+
+    dpart_cut = dpart_cut[:incr]
+    dpart_calc_cut = dpart_calc_cut[:incr]
+
+    r8 =  (sig**6)*(1.0/dpart_calc_cut)**8
+    r14 = 2.0*(sig**12)*(1.0/dpart_calc_cut)**14
+    r814 = r14-r8
+    r814v = dpart_cut*r814
+    dLJP_i = -24.0*eps*np.sum(r814v,axis=0)
+    
+    return dLJP_i
+
+
+
+@njit
+def dLJpot(r0, sig, eps, cutoff, nb_part, D):
+    """
+    Gradient du potentiel de Lennard-Jones pour n particules
+
+    Args:
+        r (array): positions des particules
+        sig (int): paramètre du puit de LJ
+        eps (float): profondeur du puit de LJ
+        cut_off (int): distance a partir de laquelle la force est nulle
+        nb_part (int): nombre de particules
+        D (int): nombre de dimensions
+
+    Returns:
+        dLJP (array): Gradient du potentiel des particules
+    """
+    dLJP = np.empty((nb_part,D), dtype=float)
+    for i in range(nb_part):
+        dLJP[i] = dLJpot_i(r0, i, sig, eps, cutoff, nb_part, D)
+    return dLJP
+
+
+
+
+
+
+#################################################################################################
+#####################TEST DU TEMPS POUR L'ALGO VECTORIEL DE DLJP ET L'ANCIEN#####################
+#################################################################################################
+
 
 # Constantes
 L_box = 30  #bord boite en nm
@@ -102,5 +183,3 @@ for i in range(5):
     
 print(r0[:5])
 print(r1[:5])
-    
-    
