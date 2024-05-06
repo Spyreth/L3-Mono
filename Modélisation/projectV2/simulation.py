@@ -29,7 +29,7 @@ save_interval = 20000
 pressure_calc_interval = 100000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
-results_name = r'/testLJ2_20x20'
+results_name = r'/testLJ2_20x20_5_000_000'
 
 # Initialisation des positions et des vitesses
 r, nb_part = pos_cristal2D(20, L_box)

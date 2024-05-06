@@ -7,7 +7,7 @@ from mesures.Measure import sumEC, sumLJpotsyst, sumLJwalls, calcTemp
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
-results_name = r'/testLJ2_20x20'
+results_name = r'/testLJ2_20x20_5_000_000'
 
 
 param = get_param(save_folder+results_name+r'/param.txt')
