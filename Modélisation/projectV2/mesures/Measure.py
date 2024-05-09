@@ -74,7 +74,6 @@ def calcTemp(v, m, kb):
     vit_abs2 = v.T[0]**2 + v.T[1]**2
     T = m*np.mean(vit_abs2)/2/kb
     return T
-    
 
 
 
