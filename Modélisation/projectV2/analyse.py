@@ -87,6 +87,8 @@ plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
 
 #################################################
 ######## ANIMATION ###################################
+progress_affichage = len/100
+
 def init():
     global r, rayon, nb_part, ax, particles
     
@@ -102,7 +104,7 @@ def animate(i):
     for j in range(nb_part):
         particles[j].center = (r[i,j, 0], r[i,j, 1])
 
-    if i % 50 == 0:
+    if i % progress_affichage == 0:
         progress = round(i / nb_pas * save_interval * 100, 0)
         print(f'Avancement animation: {progress}%')
 
