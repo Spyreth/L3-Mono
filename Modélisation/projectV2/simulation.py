@@ -1,19 +1,20 @@
 import os
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
-from dyna.dynam import update
+from dyna.dynam import dLJP, verlet_LJ
+from dyna.walls import LJ_walls
 from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
 
 # Constantes
-L_box = 10  #bord boite en nm
+L_box = 12  #bord boite en nm
 D = 2 #dimension
 nb_part = 2  #nombre de particules
-dt = 0.00004  #pas de temps en ps
-T = 150 #température initiale en Kelvin
+dt = 0.00002  #pas de temps en ps
+T = 600 #température initiale en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 6000000
+nb_pas = 3000000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -24,8 +25,8 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 30000
-pressure_calc_interval = 600000
+save_interval = 10000
+pressure_calc_interval = 300000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
 results_name = r'/testGP'
@@ -40,7 +41,11 @@ save_parameters(save_folder, results_name, L_box, D, nb_part, dt, m_part, nb_pas
 
 
 progress_affichage = nb_pas/100 #pour afficher le progrès tous les %
-f_sum = 0
+
+force_LJ = dLJP(r, sig, eps, cutoff, nb_part, D)
+force_wall, force_wall_tot = LJ_walls(r, nb_part, sig, eps, L_box, D)
+force = force_LJ+force_wall
+f_sum = force_wall_tot
 
 for i in range(nb_pas):
     if i % save_interval == 0:
@@ -50,7 +55,7 @@ for i in range(nb_pas):
         progress = round(i / nb_pas * 100)
         print(f'Avancement calculs: {progress}%')
 
-    r, v, force_wall_tot = update(r, v, dt, m_part, nb_part, sig, eps, cutoff, D, L_box)
+    r, v, force, force_wall_tot = verlet_LJ(r, v, force, dt, m_part, nb_part, sig, eps, cutoff, D, L_box)
     f_sum += force_wall_tot
 
     if i % pressure_calc_interval == 0:

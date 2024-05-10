@@ -26,6 +26,40 @@ def verlet(r0, v0, force, pas, m) :
     return r1, v1
 
 
+@njit
+def verlet_LJ(r0, v0, force, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
+    """Calcule les positions et vitesses à t+1 via verlet
+
+    Args:
+        r0 (array): positions des particules à t0
+        v0 (array): vitesses des particules à t0
+        force (array): forces s'appliquant sur les particules à t0
+        pas (float): pas de temps de calcul
+        m (float): masse des particules
+
+    Returns:
+        r1 (array): positions des particules à t1
+        v1 (array): vitesses des particules à t1
+    """
+    
+    v1_2 = v0 + force*pas/(2*m)
+    r1 = r0 + v1_2*pas
+    force_LJ = dLJP(r0, sig, eps, cutoff, nb_part, D)
+    force_wall, force_wall_tot = LJ_walls(r0, nb_part, sig, eps, L_box, D)
+    force1 = force_LJ+force_wall
+    v1 = v1_2 + force1*pas/(2*m)
+
+    return r1, v1, force1, force_wall_tot
+
+
+@njit
+def verlet_billard(r0, v0, nb_part, m, L_box, D, rayon) :
+    r1 = r0 + v0
+    v1 = v0
+    r_1, v_1, delta_p = reflectBC(r_1, v_1, nb_part, m, L_box, D, rayon)
+    return r1, v1, delta_p
+
+
 
 @njit
 def dLJP(r, sig, eps, cutoff, nb_part, D):
