@@ -7,7 +7,7 @@ from mesures.Measure import sumEC, calcTemp
 
 
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultatsbillard'
-results_name = r'/testpressure4'
+results_name = r'/testGP'
 
 
 param = get_param(save_folder+results_name+r'/param.txt')
@@ -83,6 +83,8 @@ plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
 
 #################################################
 ######## ANIMATION ###################################
+progress_affichage = len/10
+
 def init():
     global r, rayon, nb_part, ax, particles
     
@@ -98,7 +100,7 @@ def animate(i):
     for j in range(nb_part):
         particles[j].center = (r[i,j, 0], r[i,j, 1])
 
-    if i % 50 == 0:
+    if i % progress_affichage == 0:
         progress = round(i / nb_pas * save_interval * 100, 1)
         print(f'Avancement animation: {progress}%')
 

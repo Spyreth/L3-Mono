@@ -1,21 +1,19 @@
-import numpy as np
 import os
-from numba import njit
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import random_vit, vit_temp
-from dyna.dynam import update_billard
+from dyna.dynam import verlet_billard, update_billard
 from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
 
 # Constantes
-L_box = 20  #bord boite en nm
+L_box = 15  #bord boite en nm
 D = 2 #dimension
-nb_part = 300  #nombre de particules
-dt = 0.0001  #pas de temps en ps
-T = 300 #température en Kelvin
+nb_part = 2  #nombre de particules
+dt = 0.00001  #pas de temps en ps
+T = 300 #température initiale en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 5000000
+nb_pas = 10_000_000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -26,14 +24,14 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 10000
-pressure_calc_interval = 100000
+save_interval = 100_000
+pressure_calc_interval = 1_000_000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultatsbillard'
-results_name = r'/testpressure4'
+results_name = r'/testGP'
 
 # Initialisation des positions et des vitesses
-r = random_pos(nb_part, L_box, D)
+r, nb_part = pos_cristal2D(12, L_box)
 v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
@@ -54,7 +52,7 @@ for i in range(nb_pas):
         progress = round(i / nb_pas * 100)
         print(f'Avancement calculs: {progress}%')
 
-    r, v, delta_p = update_billard(r, v, dt, m_part, nb_part, rayon, D, L_box)
+    r, v, delta_p = verlet_billard(r, v, dt, nb_part, m_part, L_box, D, rayon)
     delta_p_tot += delta_p
 
     if i % pressure_calc_interval == 0:

@@ -53,10 +53,10 @@ def verlet_LJ(r0, v0, force, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
 
 
 @njit
-def verlet_billard(r0, v0, nb_part, m, L_box, D, rayon) :
-    r1 = r0 + v0
+def verlet_billard(r0, v0, pas, nb_part, m, L_box, D, rayon) :
+    r1 = r0 + v0*pas
     v1 = v0
-    r_1, v_1, delta_p = reflectBC(r_1, v_1, nb_part, m, L_box, D, rayon)
+    r1, v1, delta_p = reflectBC(r1, v1, nb_part, m, L_box, D, rayon)
     return r1, v1, delta_p
 
 

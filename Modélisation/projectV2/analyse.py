@@ -87,7 +87,7 @@ plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
 
 #################################################
 ######## ANIMATION ###################################
-progress_affichage = len/100
+progress_affichage = len/10
 
 def init():
     global r, rayon, nb_part, ax, particles
