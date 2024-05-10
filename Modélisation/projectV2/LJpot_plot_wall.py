@@ -18,7 +18,7 @@ def pot(x):
     else:
         return 0
 
-x = np.linspace(1.1, 1.2, 1500)
+x = np.linspace(0.8, 1.5, 1500)
 f = np.empty((np.size(x)), dtype=np.float64)
 p = np.empty((np.size(x)), dtype=np.float64)
 incr=0
@@ -28,9 +28,13 @@ for elem in x:
     incr += 1
 
 plt.figure(figsize=(12,8))
-plt.xlim(1.1, 1.2)
-plt.ylim(-0.25, 0.25)
-plt.plot(x, f, 'k.', label='force')
-plt.plot(x, p, 'k-', label='potentiel')
+plt.xlim(0.8, 1.5)
+plt.ylim(-1, 4)
+plt.plot(x, f, 'r-', label='force')
+plt.plot(x, p, 'b-', label='potentiel')
+plt.xlabel('r (unités arbitraires)')
+plt.ylabel('E (unités arbitraires)')
 plt.legend()
+plt.grid()
+plt.title("Potentiel de Lennard-Jones tronqué et force associée pour eps = 1 et sig = 1")
 plt.show()

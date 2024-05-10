@@ -7,13 +7,13 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
 # Constantes
-L_box = 20  #bord boite en nm
+L_box = 10  #bord boite en nm
 D = 2 #dimension
 nb_part = 2  #nombre de particules
-dt = 0.00002  #pas de temps en ps
-T = 300 #température initiale en Kelvin
+dt = 0.00004  #pas de temps en ps
+T = 150 #température initiale en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 5000000
+nb_pas = 6000000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -24,14 +24,14 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 20000
-pressure_calc_interval = 100000
+save_interval = 30000
+pressure_calc_interval = 600000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats'
-results_name = r'/testLJ2_20x20_5_000_000'
+results_name = r'/testGP'
 
 # Initialisation des positions et des vitesses
-r, nb_part = pos_cristal2D(20, L_box)
+r, nb_part = pos_cristal2D(12, L_box)
 v = vit_temp(nb_part, T, Kb_scaled, m_part)
 
 # Initialisation des fichiers de sauvegarde
