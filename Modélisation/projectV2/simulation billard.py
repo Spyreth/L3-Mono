@@ -1,7 +1,7 @@
 import os
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import random_vit, vit_temp
-from dyna.dynam import verlet_billard, update_billard
+from dyna.dynam import verlet_billard
 from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 

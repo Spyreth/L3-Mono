@@ -2,7 +2,8 @@ import numpy as np
 from numba import njit
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
-from dyna.dynam import verlet, LJ_walls
+from dyna.dynam import dLJP
+from dyna.walls import LJ_walls
 import time
 
 
@@ -183,3 +184,89 @@ for i in range(5):
     
 print(r0[:5])
 print(r1[:5])
+
+
+
+##############################################################################
+#####################ANCIENNES FONCTIONS UPDATE ET VERLET#####################
+##############################################################################
+
+
+
+@njit
+def verlet(r0, v0, force, pas, m) :
+    """Calcule les positions et vitesses à t+1 via verlet
+
+    Args:
+        r0 (array): positions des particules à t0
+        v0 (array): vitesses des particules à t0
+        force (array): forces s'appliquant sur les particules à t0
+        pas (float): pas de temps de calcul
+        m (float): masse des particules
+
+    Returns:
+        r1 (array): positions des particules à t1
+        v1 (array): vitesses des particules à t1
+    """
+    
+    v1_2 = v0 + force*pas/(2*m)
+    r1 = r0 + v1_2*pas
+    v1 = v1_2 + force*pas/(2*m)
+
+    return r1, v1
+
+
+
+@njit
+def update(r_0, v_0, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
+    """
+    Calcule les positions et vitesses à t+1 à partir de t en utilisant verlet
+    Args:
+        r_0 (array): positions des particules à t0
+        v_0 (array): vitesses des particules à t0
+        pas (float): pas de temps d'intégration
+        m (float): masse des particules
+        nb_part (int): nb de particules
+        sig (float): paramètre du puit de LJ
+        eps (float): profondeur du puit de LJ
+        cutoff (float): distance a partir de laquelle la force est nulle
+        D (int): nombre de dimensions
+        L_box (float): taille de la boîte
+    Returns:
+        r_1 (array): positions des particules à t1
+        v_1 (array): vitesses des particules à t1
+    """
+    
+    #calcul des forces dûes à LJ et aux murs
+    force_LJ = dLJP(r_0, sig, eps, cutoff, nb_part, D)
+    force_wall, force_wall_tot = LJ_walls(r_0, nb_part, sig, eps, L_box, D)
+    force = force_LJ+force_wall
+    
+    #update des positions et des vitesses avec verlet
+    r_1, v_1 = verlet(r_0, v_0, force, pas, m)
+    
+    return r_1, v_1, force_wall_tot
+
+
+
+@njit
+def update_billard(r_0, v_0, pas, m, nb_part, rayon, D, L_box):
+    """Calcule les positions et vitesses à t+1 à partir de t en utilisant verlet sans interactions entre les particules
+    Args:
+        r_0 (array): positions des particules à t0
+        v_0 (array): vitesses des particules à t0
+        pas (float): pas de temps d'intégration
+        m (float): masse des particules
+        nb_part (int): nb de particules
+        rayon (float): rayon des particules
+        D (int): nb de dimensions
+        L_box (float): taille de la boîte
+    Returns:
+        r_1 (array): positions des particules à t1
+        v_1 (array): vitesses des particules à t1
+    """
+    #on applique verlet avec aucune forces (optimisation possible)
+    r_1, v_1 = verlet(r_0, v_0, 0, pas, m)
+    #on vérifie les collisions
+    r_1, v_1, delta_p = reflectBC(r_1, v_1, nb_part, m, L_box, D, rayon)
+    return r_1, v_1, delta_p

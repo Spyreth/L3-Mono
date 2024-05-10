@@ -7,12 +7,12 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
 # Constantes
-L_box = 12  #bord boite en nm
+L_box = 15  #bord boite en nm
 D = 2 #dimension
-dt = 0.00004  #pas de temps en ps
+dt = 0.00001  #pas de temps en ps
 T = [i*30 for i in range(30)] #température initiale en Kelvin
 m_part = 39.95  #masse particules en ua
-nb_pas = 6000000
+nb_pas = 10_000_000
 
 # Paramètres du potentiel Lennard-Jones
 sig = 0.34 #paramètres de distance du potentiel en nm
@@ -23,8 +23,8 @@ cutoff = 3.2*sig
 
 # Paramètres de l'animation et des mesures
 rayon = 0.1
-save_interval = 30000
-pressure_calc_interval = 600000
+save_interval = 100_000
+pressure_calc_interval = 1_000_000
 script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats/GP2_12x12_L12'
 results_name = r'/GP2_12x12_L12'
