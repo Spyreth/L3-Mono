@@ -26,8 +26,8 @@ rayon = 0.1
 save_interval = 100_000
 pressure_calc_interval = 1_000_000
 script_directory = os.path.dirname(os.path.abspath(__file__))
-save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats/GP2_12x12_L12'
-results_name = r'/GP2_12x12_L12'
+save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultats/GP2_12x12_L15'
+results_name = r'/GP2_12x12_L15'
 
 for temp in T:
     # Initialisation des positions et des vitesses
