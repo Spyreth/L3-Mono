@@ -1,13 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from matplotlib import animation
 from filemanager.read import get_param, get_posvittime, get_pressure
-from mesures.Measure import sumEC, sumLJpotsyst, sumLJwalls, calcTemp
-from scipy.stats import linregress
+from mesures.Measure import calcTemp
+from scipy.optimize import curve_fit
 
 
-T = [i*30 for i in range(20)] #température initiale en Kelvin
+T = [i*30 for i in range(30)] #température initiale en Kelvin
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultatsbillard/GP2_12x12_L15'
 results_name = r'/GP2_12x12_L15'
 T_calc = np.empty(len(T))
@@ -42,30 +41,44 @@ for temp in T:
     for j in range(len):
         T_i[j] = calcTemp(v[j], m_part, kb)
         
-    indice_T = int(0.4*np.size(T_i))
-    indice_p = int(0.4*np.size(pressure))
+    indice_T = int(0.7*np.size(T_i))
+    indice_p = int(0.7*np.size(pressure))
     T_moy = np.mean(T_i[indice_T:])
     p_moy = np.mean(pressure[indice_p:])
     T_calc[i] = T_moy
     p_calc[i] = p_moy
     i += 1
     
-    
+
+def linear(x,a):
+    return a*x
+
+popt, pcov = curve_fit(linear, T_calc, p_calc)
+slope = popt[0]
+slope_err = np.sqrt(np.diag(pcov))[0]
+
+
+"""
 results = linregress(T_calc, p_calc)
 slope = results.slope
 intercept = results.intercept
 slope_err = results.stderr
 intercept_err = results.intercept_stderr
+"""
+
+
+
 T_plot = np.linspace(T[0], T[-1], 200)   
-slope_theorique = np.float64(nb_part*kb/(L_box**2)).round(5)
+slope_theorique = np.float64(nb_part*kb/(L_box**2)).round(6)
 
 plt.figure(figsize=(12,8))
-plt.scatter(T_calc, p_calc, label='p en fonction de T')
-plt.plot(T_plot, T_plot*slope + intercept, 'r-', label='ajustement linéaire')
-plt.text(500, 0.4, f'pente = {slope.round(5)} +- {slope_err.round(5)}', fontsize=12)
-plt.text(500, 0.3, f'Nkb/V = {slope_theorique}', fontsize=12)
+plt.scatter(T_calc, p_calc, label='Données simulées')
+plt.plot(T_plot, T_plot*slope, 'r-', label='Ajustement linéaire')
+plt.text(610, 1.6, f'pente = {slope.round(6)} +- {slope_err.round(6)}', fontsize=12)
+plt.text(610, 1.3, f'Nkb/V = {slope_theorique}', fontsize=12)
 plt.xlabel('T (K)')
 plt.ylabel('p (unités du projet)')
+plt.title('Vérification de la loi des gaz parfaits')
 plt.grid()
 plt.legend()
 plt.savefig(save_folder+r'/Loi des gaz parfaits.png')
