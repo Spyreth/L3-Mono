@@ -2,23 +2,9 @@ import csv
 import os
 
 
-def csv_init(folder, name, nb_part, D):
-
+def csv_init(folder, name):
     if not os.path.exists(folder + name):
         os.makedirs(folder + name)
-    header = [f"part_{i+1}" for i in range(nb_part)]
-
-    with open((folder+name+r'/time.csv'), 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow('t')
-
-    for d in range(D):
-        with open((folder+name+fr'/pos_{d}.csv'), 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(header)
-        with open((folder+name+fr'/vit_{d}.csv'), 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(header)
 
 
 

@@ -58,15 +58,6 @@ slope = popt[0]
 slope_err = np.sqrt(np.diag(pcov))[0]
 
 
-"""
-results = linregress(T_calc, p_calc)
-slope = results.slope
-intercept = results.intercept
-slope_err = results.stderr
-intercept_err = results.intercept_stderr
-"""
-
-
 
 T_plot = np.linspace(T[0], T[-1], 200)   
 slope_theorique = np.float64(nb_part*kb/(L_box**2)).round(6)

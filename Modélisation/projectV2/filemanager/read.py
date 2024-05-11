@@ -5,15 +5,15 @@ import numpy as np
 def get_posvittime(folder, D, nb_part, nb_pas, save_interval):
     nb_pas_saved = int(nb_pas/save_interval)
 
-    t = pd.read_csv((folder + r"/time.csv"), header=None, skiprows=1).values
+    t = pd.read_csv((folder + r"/time.csv"), header=None).values
 
     r = np.empty((nb_pas_saved, nb_part, D), np.float64)
     v = np.empty((nb_pas_saved, nb_part, D), np.float64)
 
     for d in range(D):
-        r_data = pd.read_csv((folder + fr"/pos_{d}.csv"), header=None, skiprows=1).values
+        r_data = pd.read_csv((folder + fr"/pos_{d}.csv"), header=None).values
         r[:, :, d] = r_data.reshape(nb_pas_saved, nb_part)
-        v_data = pd.read_csv((folder + fr"/vit_{d}.csv"), header=None, skiprows=1).values
+        v_data = pd.read_csv((folder + fr"/vit_{d}.csv"), header=None).values
         v[:, :, d] = v_data.reshape(nb_pas_saved, nb_part)
 
     return r,v,t
