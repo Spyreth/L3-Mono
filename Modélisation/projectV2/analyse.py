@@ -54,6 +54,7 @@ plt.plot(t, E_LJwalls, 'c-', label='E_LJWalls')
 plt.plot(t, E_C, 'm-', label='E_Cin')
 plt.xlabel('t (ps)')
 plt.ylabel('E')
+plt.title('Graphe de l\'évolution des différentes énergies du système')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/total energy.png')
 
@@ -62,6 +63,7 @@ plt.figure(figsize=(12,8))
 plt.plot(t, T, 'r-', label='Température')
 plt.xlabel('t (ps)')
 plt.ylabel('T (K)')
+plt.title('Evolution de la température du système')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Temperature.png')
 
@@ -70,6 +72,7 @@ plt.figure(figsize=(12,8))
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pressure, 'r-', label='Pression')
 plt.xlabel('t (ps)')
 plt.ylabel('p')
+plt.title('Evolution de la pression du système')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Pression.png')
 
@@ -82,9 +85,19 @@ plt.plot(t, NkbT, 'r-', label='NKbT')
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pV, 'b-', label='pV')
 plt.xlabel('t (ps)')
 plt.ylabel('pV, NKbT')
+plt.title('Vérification de la loi des gaz parfaits')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
 """
+
+#Graphe de l'énergie relative
+plt.figure(figsize=(12,5))
+plt.plot(t, (E_tot-E_tot[0])/E_tot[0]*100, 'r-', label='Différence d\'énergie relative (%)')
+plt.xlabel('t (ps)')
+plt.ylabel('delta E (%)')
+plt.title('Evolution de l\'énergie du système en pourcentage')
+plt.legend()
+plt.savefig(save_folder+results_name+r'/relative energy.png')
 
 
 
