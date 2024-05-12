@@ -26,23 +26,23 @@ save_interval = int(param["save_interval"])
 pressure_calc_interval = int(param["pressure_calc_interval"])
 kb = float(param['Kb'])
 
-
+#Récupération des positions, des vitesses, des temps et des pressions
 r, v, t = get_posvittime((save_folder+results_name), D, nb_part, nb_pas, save_interval)
 pressure = get_pressure(save_folder+results_name)
 
+#initialisation des variables pour les calculs
 len = np.size(r, axis=0)
 E_C = np.empty((len), np.float64)
 T = np.empty((len), np.float64)
 
-
+#calcul des températures et des énergies cinétiquess
 for i in range(len):
     E_C[i] = sumEC(v[i], m_part, nb_part)
     T[i] = calcTemp(v[i], m_part, kb)
-
 E_tot = E_C
-pV = pressure*(L_box**2)
-NkbT = nb_part*kb*T
 
+
+#Graphe des énergies
 plt.figure(figsize=(12,8))
 plt.plot(t, E_tot, 'r-', label='E_tot')
 plt.xlabel('t (ps)')
@@ -50,6 +50,7 @@ plt.ylabel('E')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/total energy.png')
 
+#Graphe de la température
 plt.figure(figsize=(12,8))
 plt.plot(t, T, 'r-', label='Température')
 plt.xlabel('t (ps)')
@@ -57,6 +58,7 @@ plt.ylabel('T (K)')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Temperature.png')
 
+#Graphe de la pression
 plt.figure(figsize=(12,8))
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pressure, 'r-', label='Pression')
 plt.xlabel('t (ps)')
@@ -64,6 +66,10 @@ plt.ylabel('p')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Pression.png')
 
+"""
+#Graphe de pV selon NkbT
+pV = pressure*(L_box**2)
+NkbT = nb_part*kb*T
 plt.figure(figsize=(12,8))
 plt.plot(t, NkbT, 'r-', label='NKbT')
 plt.plot((np.linspace(0, nb_pas*dt, int(nb_pas/pressure_calc_interval))), pV, 'b-', label='pV')
@@ -71,7 +77,7 @@ plt.xlabel('t (ps)')
 plt.ylabel('pV, NKbT')
 plt.legend()
 plt.savefig(save_folder+results_name+r'/Loi des gaz parfaits.png')
-
+"""
 
 
 

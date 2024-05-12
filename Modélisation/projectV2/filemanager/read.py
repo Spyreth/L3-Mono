@@ -3,6 +3,8 @@ import numpy as np
 
 
 def get_posvittime(folder, D, nb_part, nb_pas, save_interval):
+    """Récupère les positions, vitesses et temps d'une simulation a partir des csv"
+    """
     nb_pas_saved = int(nb_pas/save_interval)
 
     t = pd.read_csv((folder + r"/time.csv"), header=None).values
@@ -20,6 +22,7 @@ def get_posvittime(folder, D, nb_part, nb_pas, save_interval):
 
 
 def get_param(folder):
+    """Récupère les paramètres à partir du fichier txt sous forme de dictionnaire"""
     param = {}
     with open(folder, 'r') as f:
         for ligne in f:
@@ -30,6 +33,7 @@ def get_param(folder):
 
 
 def get_pressure(folder):
+    """Récupère les pressions d'une simulation"""
     pressure = pd.read_csv((folder + r"/pressure.csv"), header=None).values
     return pressure
 

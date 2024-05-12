@@ -10,7 +10,8 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 L_box = 15  #bord boite en nm
 D = 2 #dimension
 dt = 0.00001  #pas de temps en ps
-T = [i*30 for i in range(30)] #température initiale en Kelvin
+nb_part = 2  #nombre de particules, remplacé dans la suite si on initialise les positions avec pos_cristal2D
+T = [i*30 for i in range(30)] #températures initiales en Kelvin
 m_part = 39.95  #masse particules en ua
 nb_pas = 10_000_000
 
@@ -29,35 +30,39 @@ script_directory = os.path.dirname(os.path.abspath(__file__))
 save_folder = os.path.dirname(os.path.abspath(__file__)) + r'/Resultatsbillard/GP2_12x12_L15'
 results_name = r'/GP2_12x12_L15'
 
-
+# Boucle sur chaque température de T
 for temp in T:
     # Initialisation des positions et des vitesses
     r, nb_part = pos_cristal2D(12, L_box)
     v = vit_temp(nb_part, temp, Kb_scaled, m_part)
 
     # Initialisation des fichiers de sauvegarde
-    csv_init(save_folder, results_name+f'_Ti={temp}', 1, D)
+    csv_init(save_folder, results_name+f'_Ti={temp}')
     save_parameters(save_folder, results_name+f'_Ti={temp}', L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval, Kb_scaled)
 
 
     progress_affichage = nb_pas/100 #pour afficher le progrès tous les %
-    delta_p_tot = 0
+    delta_p_tot = 0 #pour le calcul de pression
 
     for i in range(nb_pas):
         
+        # Sauvegarde des données tous les save_interval pas de temps
         if i % save_interval == 0:
             datasave(save_folder, results_name+f'_Ti={temp}', r, v, i*dt, D)
 
+        # Affichage de l'avancement
         if i % progress_affichage == 0:
             progress = round(i / nb_pas * 100)
             print(f'Avancement calculs pour T={temp}: {progress}%')
 
+        # Application de verlet
         r, v, delta_p = verlet_billard(r, v, dt, nb_part, m_part, L_box, D, rayon)
-        delta_p_tot += delta_p
+        delta_p_tot += delta_p  #ajout de la qté de mvt échangée avec les murs sur ce pas de temps pour le calcul de pression
 
+        # Calcul de pression si on a fini l'intervalle de calcul
         if i % pressure_calc_interval == 0:
             pressure = delta_p_tot/(pressure_calc_interval*dt*4*L_box)
             pressureSave(save_folder, results_name+f'_Ti={temp}', pressure)
-            delta_p_tot = 0
+            delta_p_tot = 0 #réinitialisation de delta_p pour le prochain intervalle de calcul
 
 print(f'Avancement calculs: Fin')

@@ -7,6 +7,7 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
     """Calcul les forces associées pour des murs avec un potentiel LJ sur toutes les particules
     Args:
         r (array): positions des particules
+        nb_part (int): nb de particules
         sig (float): paramètre Lennard-Jones
         eps (float): profondeur du puit de LJ
         L (float): Taille de la boîte
@@ -31,6 +32,7 @@ def LJ_walls(r, nb_part, sig, eps, L, D):
                 force[incr][d] = 0
         incr += 1
 
+    #somme des normes des forces  appliquées sur les murs, pour le calcul de pression
     force_tot = np.sum(np.abs(force))
 
     return force, force_tot
@@ -42,6 +44,11 @@ def reflectBC(r_0, v_0, nb_part, m_part, L_box, D, rayon):
     Args:
         r_0 (array): positions des particules à t0
         r_1 (array): positions des particules à t1
+        nb_part (int): nb de particules
+        m_part (float): masse des particules
+        L_box (float): taille de la boîte
+        D (int): nb de dimensions
+        rayon (float): rayon des particules
     Returns:
         r_0 (array): positions des particules à t0 corrigée
         r_1 (array): positions des particules à t1 corrigée

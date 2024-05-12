@@ -4,7 +4,6 @@ from numba import njit
 @njit
 def random_pos(n, L_box, D):
     """Initialise les positions de n particules aléatoires dans la boîte
-
     Args:
         n (int): nb de particules
         L_box (int): taille de la boite
@@ -19,9 +18,7 @@ def random_pos(n, L_box, D):
 
 @njit
 def pos_cristal2D(nb_particules, len_box):
-    """
-    Initialise les positions des particules dans la boîte en forme de cristal cubique
-
+    """Initialise les positions des particules dans la boîte en forme de cristal cubique
     Args:
         nb_particules (float): nb de particules par arête d'un axe du cristal cubique
         len_box (float): longueur de la boîte (un axe)
@@ -44,6 +41,4 @@ def pos_cristal2D(nb_particules, len_box):
     return r0, n_particules
 
 if __name__ == "__main__":
-    positions_initiales, nb_part = pos_cristal2D(4,20)
-    print(positions_initiales)
-    print(nb_part)
+    print("Ceci n'est pas un script mais un package.")

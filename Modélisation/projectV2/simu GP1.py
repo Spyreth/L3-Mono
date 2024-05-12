@@ -1,7 +1,8 @@
 import os
 from initialisation.positions import random_pos, pos_cristal2D
 from initialisation.vitesses import vit_temp, random_vit
-from dyna.dynam import update
+from dyna.dynam import verlet_LJ, dLJP
+from dyna.walls import LJ_walls
 from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 
 
@@ -10,7 +11,8 @@ from filemanager.write import csv_init, save_parameters, datasave, pressureSave
 L_box = 15  #bord boite en nm
 D = 2 #dimension
 dt = 0.00001  #pas de temps en ps
-T = [i*30 for i in range(30)] #température initiale en Kelvin
+nb_part = 2  #nombre de particules, remplacé dans la suite si on initialise les positions avec pos_cristal2D
+T = [i*30 for i in range(30)] #températures initiales en Kelvin
 m_part = 39.95  #masse particules en ua
 nb_pas = 10_000_000
 
@@ -35,28 +37,38 @@ for temp in T:
     v = vit_temp(nb_part, temp, Kb_scaled, m_part)
 
     # Initialisation des fichiers de sauvegarde
-    csv_init(save_folder, results_name+f'_Ti={temp}', 1, D)
+    csv_init(save_folder, results_name+f'_Ti={temp}')
     save_parameters(save_folder, results_name+f'_Ti={temp}', L_box, D, nb_part, dt, m_part, nb_pas, sig, eps, cutoff, rayon, save_interval, pressure_calc_interval, Kb_scaled)
-
+    
+    # 1er calcul des forces pour l'itération 1 de verlet
+    force_LJ = dLJP(r, sig, eps, cutoff, nb_part, D)
+    force_wall, force_wall_tot = LJ_walls(r, nb_part, sig, eps, L_box, D)
+    force = force_LJ+force_wall
+    
+    f_sum = force_wall_tot #pour le calcul de pression
 
     progress_affichage = nb_pas/100 #pour afficher le progrès tous les %
-    f_sum = 0
+
 
     for i in range(nb_pas):
         
+        # Sauvegarde des données tous les save_interval pas de temps
         if i % save_interval == 0:
             datasave(save_folder, results_name+f'_Ti={temp}', r, v, i*dt, D)
 
+        # Affichage de l'avancement
         if i % progress_affichage == 0:
             progress = round(i / nb_pas * 100)
             print(f'Avancement calculs pour T={temp}: {progress}%')
 
-        r, v, force_wall_tot = update(r, v, dt, m_part, nb_part, sig, eps, cutoff, D, L_box)
-        f_sum += force_wall_tot
-    
+        # Application de verlet
+        r, v, force, force_wall_tot = verlet_LJ(r, v, force, dt, m_part, nb_part, sig, eps, cutoff, D, L_box)
+        f_sum += force_wall_tot #ajout de la force sur les murs sur ce pas de temps pour le calcul de pression
+        
+        # Calcul de pression si on a fini l'intervalle de calcul
         if i % pressure_calc_interval == 0:
             pressure = f_sum/(pressure_calc_interval*4*L_box)
             pressureSave(save_folder, results_name+f'_Ti={temp}', pressure)
-            f_sum = 0
+            f_sum = 0  #réinitialisation de f_sum pour le prochain intervalle de calcul
 
 print(f'Avancement calculs: Fin')

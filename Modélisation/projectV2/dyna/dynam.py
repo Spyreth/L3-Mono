@@ -7,34 +7,65 @@ from dyna.walls import reflectBC, LJ_walls
 @njit
 def verlet_LJ(r0, v0, force, pas, m, nb_part, sig, eps, cutoff, D, L_box) :
     """Calcule les positions et vitesses à t+1 via verlet
-
     Args:
         r0 (array): positions des particules à t0
         v0 (array): vitesses des particules à t0
-        force (array): forces s'appliquant sur les particules à t0
+        force (array): forces dur les particules à t0
         pas (float): pas de temps de calcul
         m (float): masse des particules
-
+        nb_part (int): nb de particules
+        sig (float): paramètre du puit de LJ
+        eps (float): profondeur du puit de LJ
+        cutoff (float): distance a partir de laquelle la force est nulle
+        D (int): nombre de dimensions    
+        L_box (float): taille de la boîte
+            
     Returns:
         r1 (array): positions des particules à t1
         v1 (array): vitesses des particules à t1
+        force1 (array): force sur les particules à t1
+        force_wall_tot (float): force totale sur les murs, pour le calcul de pression
     """
     
-    v1_2 = v0 + force*pas/(2*m)
-    r1 = r0 + v1_2*pas
+    v1_2 = v0 + force*pas/(2*m) #verlet etape 1
+    r1 = r0 + v1_2*pas #verlet etape 2
+    
+    #calcul des forces à t+1
     force_LJ = dLJP(r0, sig, eps, cutoff, nb_part, D)
     force_wall, force_wall_tot = LJ_walls(r0, nb_part, sig, eps, L_box, D)
     force1 = force_LJ+force_wall
-    v1 = v1_2 + force1*pas/(2*m)
+    
+    v1 = v1_2 + force1*pas/(2*m)  #verlet etape 3
 
     return r1, v1, force1, force_wall_tot
 
 
 @njit
 def verlet_billard(r0, v0, pas, nb_part, m, L_box, D, rayon) :
+    """Calcule les positions et vitesses à t+1 via verlet pour un système sans interactions
+    Args:
+        r0 (array): positions des particules à t0
+        v0 (array): vitesses des particules à t0
+        pas (float): pas de temps de calcul
+        nb_part (int): nb de particules
+        m (float): masse des particules    
+        L_box (float): taille de la boîte
+        D (int): nombre de dimensions
+        rayon (float):  rayon des particules
+
+    Returns:
+        r1 (array): positions des particules à t1
+        v1 (array): vitesses des particules à t1
+        delta-p (float): qté de mvt échangée avec les murs, pour le calcul de pression
+    """
+    
+    # Application de Verlet sans forces
     r1 = r0 + v0*pas
     v1 = v0
+    
+    # Application de la condition de rebond sur les murs
     r1, v1, delta_p = reflectBC(r1, v1, nb_part, m, L_box, D, rayon)
+    
     return r1, v1, delta_p
 
 
